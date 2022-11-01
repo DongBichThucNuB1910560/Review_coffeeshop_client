@@ -1,55 +1,65 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+<v-app id="inspire">
+    <v-app-bar app color="white" flat>
+        <v-container class="py-0 fill-height">
+            <v-img max-height="45" max-width="45" src="./assets/koppee_logo.svg"></v-img>
+            <v-btn href="/" text>
+                Koppee
+            </v-btn>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+            <v-spacer></v-spacer>
+            <v-avatar color="grey darken-1" size="32"></v-avatar>
+            <!-- <v-responsive max-width="260">
+          <v-text-field
+            dense
+            flat
+            hide-details
+            rounded
+            solo-inverted
+          ></v-text-field>
+        </v-responsive> -->
+        </v-container>
     </v-app-bar>
 
-    <v-main>
-      <router-view/>
+    <v-main class="grey lighten-3">
+        <v-container>
+            <v-row>
+                <v-col cols="2">
+                    <v-sheet rounded="lg">
+                        <v-list color="transparent">
+                            <v-list-item v-for="(item, i) in items" :key="i" :to="item.link" link>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.title">
+                                    </v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+                    </v-sheet>
+                </v-col>
+
+                <v-col>
+                    <v-sheet min-height="70vh" rounded="lg">
+                      <router-view></router-view>
+                    </v-sheet>
+                </v-col>
+            </v-row>
+        </v-container>
     </v-main>
-  </v-app>
+</v-app>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
-
-  data: () => ({
-    //
-  }),
-};
+    data: () => ({
+        links: [
+            'Koppee',
+        ],
+        items: [
+          {title: "Home", link: "/"},
+          {title: "Add Post", link: "/add-post"},
+          {title: "About", link: "/about"},
+          {title: "Your profile", link: "/user-profile"}
+        ]
+    }),
+}
 </script>
