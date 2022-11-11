@@ -8,38 +8,25 @@
             </v-btn>
 
             <v-spacer></v-spacer>
-            <v-avatar color="grey darken-1" size="32"></v-avatar>
-            <!-- <v-responsive max-width="260">
-          <v-text-field
-            dense
-            flat
-            hide-details
-            rounded
-            solo-inverted
-          ></v-text-field>
-        </v-responsive> -->
+            <v-btn href="/login" text v-if="!user">
+                Login
+            </v-btn>
+            <!-- <v-title>Hi, {{this.user.name}}</v-title> -->
+            <v-btn text href="javascript:void(0)" v-if="user" @click="Logout">
+                Logout
+            </v-btn>
+
         </v-container>
     </v-app-bar>
 
     <v-main class="grey lighten-3">
         <v-container>
             <v-row>
-                <v-col cols="2">
-                    <v-sheet rounded="lg">
-                        <v-list color="transparent">
-                            <v-list-item v-for="(item, i) in items" :key="i" :to="item.link" link>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="item.title">
-                                    </v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-                    </v-sheet>
-                </v-col>
+                <List :user="user"></List>
 
                 <v-col>
                     <v-sheet min-height="70vh" rounded="lg">
-                      <router-view></router-view>
+                        <router-view :user="user"></router-view>
                     </v-sheet>
                 </v-col>
             </v-row>
@@ -49,17 +36,57 @@
 </template>
 
 <script>
+import axios from 'axios';
+import List from '../src/views/List.vue';
+
 export default {
+    // computed:{
+    //     ...mapGetters({
+    //         whatever: 'Auth/isLoggedIn',
+    //     })
+    // },
+    name: 'App',
+    // props: ['user'],
+    components: {
+        List
+    },
     data: () => ({
+        user: null,
         links: [
             'Koppee',
         ],
-        items: [
-          {title: "Home", link: "/"},
-          {title: "Add Post", link: "/add-post"},
-          {title: "About", link: "/about"},
-          {title: "Your profile", link: "/user-profile"}
-        ]
+        // items: [{
+        //         title: "Home",
+        //         link: "/"
+        //     },
+        //     {
+        //         title: "Add Post",
+        //         link: "/add-post"
+        //     },
+        //     {
+        //         title: "About",
+        //         link: "/about"
+        //     },
+        // ]
     }),
+    methods: {
+        Logout() {
+            // localStorage.clear()
+            localStorage.removeItem('token')
+            this.user = null
+            this.$router.push('/login');
+        }
+    },
+    async created() {
+        const res = await axios.get('http://localhost:5500/api/users/profile',{
+            'Authorization' : localStorage.getItem('token')
+        })
+        this.user = res.data.user
+        console.log(this.user)
+
+        // this.$store.dispatch('user', response.data)
+        // this.$router.push('/').catch(() => {});
+    }
+
 }
 </script>
